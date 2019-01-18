@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>ChatBot</title>
+        <link type="text/css" rel="stylesheet" href="css/style.css"/>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div id="menu">
+                <p class="welcome">Welcome</p>
+                <p class="logout"><a id="exit" href="#">Exit Chat</a></p>
+                <div style="clear:both"></div>
+            </div>
+            <div id="chat">
+
+            </div>
+            <form name="message" action="">
+                <input name="usermsg" type="text" id="usermsg" size="63"/>
+                <input name="submitmsg" type="submit" id="submitmsg" value="Send"/>
+            </form>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+            $("#submitmsg").click(function(){
+                    $.ajax({
+                    url: "http://localhost:/usertype",
+                    type: "POST",
+                    data:{
+                            usermsg:$("#usermsg").values()
+                        },
+                    success: function(response) {
+                        var title = '';
+                        if(params.source =='KPI'){
+                            title = 'KPI\'s User Statistics';
+                        }else {
+                            title = 'GAS\'s User Statistics';
+                        }
+                        if(plus){
+                            $scope.userStaticsData2 = (JSON.parse(response))['result'];
+                            $('.gas_stt_container_2').append(user_sttpl);
+                            $('#selectbar_2').append(options_tpl);
+                            setTimeout(function () {
+                                $scope.dataInit($scope.userStaticsData2,title, plus);
+                            },500);
+                        }else {
+                            $scope.userStaticsData = (JSON.parse(response))['result'];
+                            $scope.dataInit($scope.userStaticsData,title,plus);
+                        }
+                        $('.gas_stt_container_1').LoadingOverlay("hide");
+                        $('.runmodel').removeAttr('disabled','disabled');
+                    },
+                    error: function(xhr) {
+                        console.log('error');
+                    }
+                });
+            });
+
+        </script>
+
+    </body>
+</html>

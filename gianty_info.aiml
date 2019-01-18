@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1">
+
+    <category>
+        <pattern>
+            WHAT IS GIANTY
+        </pattern>
+
+        <template>
+            Well, Gianty is a big IT company
+            <think>
+                <set name="gnt"> <set name="topic">Gianty</set> </set>
+            </think>
+        </template>
+    </category>
+
+    <!--<topic name = "Gianty">-->
+    <category>
+        <pattern>
+            TELL ME *
+        </pattern>
+        <!--<that>Well, Gianty is a big IT company</that>-->
+        <template>
+            More details, Gianty are currently working on games, chat messages with more than 500 people in Japan and Vietnam.
+        </template>
+    </category>
+
+    <category>
+        <pattern>WHICH PRODUCTS GIANTY *</pattern>
+        <template>Currently, they have Mondra, Ayakashi, Stix Chat. And more games will come in this year(such as Ayakashi2, 5 swords,...)</template>
+    </category>
+    <!--</topic>-->
+</aiml>
