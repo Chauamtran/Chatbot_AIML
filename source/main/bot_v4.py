@@ -96,7 +96,7 @@ class ChatBot(FlaskView):
 
         xml_path = "%s/config" % (path)
         self.xml_file = "%s/%s" % (xml_path, "std-startup.xml")
-        self.aiml_file = "%s/data/%s" % (path, "gianty_info.aiml")
+        self.aiml_file = "%s/data/%s" % (path, "example_info.aiml")
         self.conversation_file = "%s/conversations/%s" % (path, "conversation.txt")
         self.conversation_statistics = "%s/conversations/%s" % (path, "conversation_statistics.txt")
 

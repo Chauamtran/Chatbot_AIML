@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aiml version="1.0.1">
+
+    <category>
+        <pattern>
+            WHAT IS THIS PROJECT
+        </pattern>
+
+        <template>
+            Well, This project is an example of chatbot using AIML
+            <think>
+                <set name="chatbot"> <set name="topic">Chatbot</set> </set>
+            </think>
+        </template>
+    </category>
+
+    <!--<topic name = "Chatbot">-->
+    <category>
+        <pattern>
+            TELL ME *
+        </pattern>
+        <!--<that>Well, This project includes trained models with pre-defined questions</that>-->
+        <template>
+            More details, this project includes trained models with pre-defined questions
+            and a simple web interface to communicate with a chatbot
+        </template>
+    </category>
+
+    <!--</topic>-->
+</aiml>

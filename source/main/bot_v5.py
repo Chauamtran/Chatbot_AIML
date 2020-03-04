@@ -5,7 +5,6 @@ import speech_recognition as sr
 import pyttsx
 import flask, urllib
 
-from collections import Counter
 from flask import Flask, request
 from flask_cache import Cache
 from flask_classy import FlaskView, route
@@ -30,18 +29,6 @@ flask_chatbot = Flask(__name__)
 cache = Cache(flask_chatbot, config = {'CACHE_TYPE' : 'simple'})
 cache.init_app(flask_chatbot)
 
-def make_cached_key_post():
-
-    args = request.form
-    key = flask.request.path + '?' + urllib.urlencode([(k, v) for k in sorted(args) for v in sorted(args.getlist(k))])
-    return key
-
-def make_cached_key_get():
-
-    args = request.args
-    key = flask.request.path + '?' + urllib.urlencode([(k, v) for k in sorted(args) for v in sorted(args.getlist(k))])
-    return key
-
 
 def make_cached_key():
     get_args = request.args
@@ -61,6 +48,7 @@ def storeFile(data, file):
         data_string = "\n".join(data)
         f1.write(data_string)
 
+
 def writeDict(data, file):
     import csv
 
@@ -73,13 +61,9 @@ def writeDict(data, file):
 class ChatBot(FlaskView):
     route_base = '/'
 
-    # @route('/event/userexplorer/action', methods=['GET', 'POST'])
-    # @cache.cached(timeout=72000, key_prefix=make_cached_key)
     def __init__(self):
         pass
 
-
-    # @flask_chatbot.before_first_request
     def getConfig(self):
         self.speech_engine = pyttsx.init('espeak')
         self.speech_engine.setProperty('rate', 150)
@@ -87,16 +71,15 @@ class ChatBot(FlaskView):
 
         self.voices = self.speech_engine.getProperty('voices')
 
-        self.recognizer = sr.Recognizer()
+        # self.recognizer = sr.Recognizer()
 
         # Create the kernel and learn AIML files
         self.kernel = aiml.Kernel()
-        # self.kernel.verbose(False)
         # Get current working path
         path = os.getcwd()
         xml_path = "%s/config" % (path)
         self.xml_file = "%s/%s" % (xml_path, "std-startup.xml")
-        self.aiml_file = "%s/data/%s" % (path, "gianty_info.aiml")
+        self.aiml_file = "%s/data/%s" % (path, "example_info.aiml")
         self.conversation_file = "%s/conversations/%s" % (path, "conversation.txt")
         self.conversation_statistics = "%s/conversations/%s" % (path, "conversation_statistics.txt")
 
@@ -110,52 +93,32 @@ class ChatBot(FlaskView):
             self.kernel.bootstrap(learnFiles=self.xml_file, commands="LOAD CHATBOT")
         self.kernel.saveBrain(self.bot_brain)
 
-    # for voice in voices:
-#     print "Using voice:", repr(voice)
-#     print("void_id = %s" % voice.id)
-#     speech_engine.setProperty('voice', voice.id)
-#     speech_engine.say("Sunday Monday Tuesday Wednesday Thursday Friday Saturday")
-#     speech_engine.say("Violet Indigo Blue Green Yellow Orange Red")
-#     speech_engine.say("Apple Banana Cherry Date Guava")
-#     speech_engine.say("Us President.")
-#     speech_engine.runAndWait()
-
-
-
     def speak(self, text):
         self.speech_engine.say(text=text)
         self.speech_engine.say(" ")
         self.speech_engine.runAndWait()
 
-    def listen(self):
-        with sr.Microphone() as source:
-            self.recognizer.adjust_for_ambient_noise(source=source)
-            audio = self.recognizer.listen(source=source)
-
-        try:
-            return self.recognizer.recognize_sphinx(audio_data=audio)
-
-        except sr.UnknownValueError:
-            print("Could not understand audio")
-        except sr.RequestError as re:
-            print("Recog Error; {}".format(re))
-
-        return ""
-
+    # def listen(self):
+    #     with sr.Microphone() as source:
+    #         self.recognizer.adjust_for_ambient_noise(source=source)
+    #         audio = self.recognizer.listen(source=source)
+    #
+    #     try:
+    #         return self.recognizer.recognize_sphinx(audio_data=audio)
+    #
+    #     except sr.UnknownValueError:
+    #         print("Could not understand audio")
+    #     except sr.RequestError as re:
+    #         print("Recog Error; {}".format(re))
+    #
+    #     return ""
 
     def normalizeString(self, pattern_msg, type=1):
         import re
 
         if type == 1:
-            # if '.' == pattern_msg[-1]:
-            #     pattern_msg = pattern_msg.replace(".", "")
-            # elif '!' == pattern_msg[-1]:
-            #     pattern_msg = pattern_msg.replace("!", "")
-            # elif '?' == pattern_msg[-1]:
-            #     pattern_msg = pattern_msg.replace("?", "")
             normalized_string = re.sub('\W+', " ", pattern_msg)
             return normalized_string.upper()
-
 
     def createBasicFormat(self, type, pattern_msg, template_msg):
         if type == 1:
@@ -165,7 +128,6 @@ class ChatBot(FlaskView):
             return string_format
         else:
             return ""
-
 
     def removeAndInsertAIML(self, previous_msg, current_msg, file):
 
@@ -208,16 +170,6 @@ class ChatBot(FlaskView):
             msg = request.form.get('message')
 
         if msg:
-            # msg = msg.encode('ascii', 'ignore')
-            # print(msg)
-            # print(chat_bot.data_store)
-        # while True:
-            # speak("Please speak something")
-            # msg = listen()
-
-            # msg = raw_input("Human: ")
-
-            # print(data_store)
             if msg == "exit":
                 if chat_bot.data_store:
                     storeFile(data=chat_bot.data_store, file=chat_bot.conversation_file)

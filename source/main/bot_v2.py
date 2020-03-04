@@ -75,7 +75,7 @@ kernel.verbose(False)
 path = os.getcwd()
 xml_path = "%s/config" % (path)
 xml_file = "%s/%s" % (xml_path, "std-startup.xml")
-aiml_file = "%s/data/%s" % (path, "gianty_info.aiml")
+aiml_file = "%s/data/%s" % (path, "example_info.aiml")
 conversation_file = "%s/conversations/%s" % (path, "conversation.txt")
 conversation_statistics = "%s/conversations/%s" % (path, "conversation_statistics.txt")
 
